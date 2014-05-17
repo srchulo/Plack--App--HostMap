@@ -133,20 +133,23 @@ should also work.
 =head1 PERFORMANCE
  
 As mentioned in the L<DESCRIPTION|/"DESCRIPTION">, Plack::App::HostMap should perform
-much more efficiently than Plack::App::URLMap when being used for host names. One
+much more efficiently than L<Plack::App::URLMap> when being used for host names. One
 caveat would be with the C<*.> syntax that can be used with L<map|/"map">. If you have even
 just one mapping with a C<*.> in it:
 
     $host_map->map("*.foo.com" => $foo_app);
 
 Then on every request Plack::App::HostMap must call L<Domain::PublicSuffix>'s C<get_root_domain>
-subroutine to parse out the root domain of the host. I can't imagine that this isn't very costly, but
+subroutine to parse out the root domain of the host. I can't imagine that this is very costly, but
 maybe if you are receiving a lot of requests this could make a difference. If you find that to be the case,
 instead of using the C<*.> syntax you could list out each individual possibility:
 
     $host_map->map("beta.foo.com" => $foo_app);
     $host_map->map("www.foo.com" => $foo_app);
     $host_map->map("foo.com" => $foo_app);
+
+    #or
+	$host_map->map(["beta.foo.com", "www.foo.com", "foo.com"] => $foo_app);
 
 And the result would be that lookup is back to constant time. However, you might never see a performance hit
 and it might be more worth it to use the convenient syntax.
