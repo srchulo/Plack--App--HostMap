@@ -149,7 +149,7 @@ instead of using the C<*.> syntax you could list out each individual possibility
     $host_map->map("foo.com" => $foo_app);
 
     #or
-	$host_map->map(["beta.foo.com", "www.foo.com", "foo.com"] => $foo_app);
+    $host_map->map(["beta.foo.com", "www.foo.com", "foo.com"] => $foo_app);
 
 And the result would be that lookup is back to constant time. However, you might never see a performance hit
 and it might be more worth it to use the convenient syntax.
