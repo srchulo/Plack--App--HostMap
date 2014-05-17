@@ -1,6 +1,9 @@
 Revision history for Plack::App::HostMap
 
 {{$NEXT}}
+	Removed warn from module
+
+0.003     2014-05-17 13:46:15-07:00 America/Los_Angeles
 	Fixed issue for *. syntax
 
 0.002     2014-05-17 12:59:35-07:00 America/Los_Angeles
