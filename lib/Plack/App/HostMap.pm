@@ -33,7 +33,7 @@ sub _map_domain {
 
 sub prepare_app { 
 	my ($self) = @_;
-	$self->{_dps} = Domain::PublicSuffix->new;
+	$self->{_dps} = Domain::PublicSuffix->new if keys %{$self->{_all_subdomains}};
 }
 
 sub call {
@@ -45,7 +45,7 @@ sub call {
 		$http_host =~ s/:$port$//;
     }
 
-	if(keys %{$self->{_all_subdomains}}) { 
+	if($self->{_dps}) {
 		my $root = $self->{_dps}->get_root_domain($http_host);	
 		if($self->{_map}->{$root}) {
 			warn "ROOT $root\n";
@@ -55,9 +55,9 @@ sub call {
 
     return [404, [ 'Content-Type' => 'text/plain' ], [ "Not Found" ]] unless $self->{_map}->{$http_host};
 
+
 	my $app = $self->{_map}->{$http_host};
-    return $self->response_cb($app->($env), sub {
-    });
+	return $app->($env);
 }
  
 1;
