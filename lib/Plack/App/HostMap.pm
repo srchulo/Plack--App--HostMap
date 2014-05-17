@@ -64,10 +64,6 @@ sub call {
 
 __END__
  
-=head1 NAME
- 
-Plack::App::URLMap - Map multiple Plack apps by host
- 
 =head1 SYNOPSIS
  
     use Plack::App::HostMap;
@@ -86,7 +82,7 @@ Plack::App::URLMap - Map multiple Plack apps by host
     #map multiple hosts to same app conveniently
     $host_map->map(["www.foo.com", "foo.com", "beta.foo.com"] => $foo_app);
 
-	#map all subdomains of a host to an app
+    #map all subdomains of a host to an app
     $host_map->map("*.foo.com" => $foo_app); #will match www.foo.com, foo.com, beta.foo.com, test.foo.com, beta.test.foo.com, etc...
  
     my $app = $host_map->to_app;
