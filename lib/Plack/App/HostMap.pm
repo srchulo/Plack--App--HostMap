@@ -202,7 +202,7 @@ mappings for a domain. For instance, if you have:
     beta.foo.com -> *.foo.com
 
 Then after the first time that a url with the host C<beta.foo.com> is requested, the domain beta.foo.com will be stored in a hash as 
-a key with its value being C<foo.com>, to specify that that's what it maps to.
+a key with its value being C<*.foo.com>, to specify that that's what it maps to.
 If you are using the C<*.> syntax, it is strongly recommended that you do not turn this off because it could speed things up a lot since you avoid
 L<Domain::PublicSuffix>'s parsing logic, as well as some regex and logic that L<Plack::App::Hostmap> does to map the host to the right rule. However,
 one particular reason why you might want to disable caching would be if you were pointing A LOT of domains at your app. For instance, if you have the rule:
@@ -223,8 +223,8 @@ And someone were to request many foo.com domains:
     test2.foo.com
     ...
 
-Then each one would be cached as a key with its value being foo.com. If you are really worried about someone crashing your app, you could set L</no_cache> to 1, or instead of using
-the C<*.> syntax you could list out each individual host. Note: This only applies if you are using the C<*.> syntax. Otherwise, the hash
+Then each one would be cached as a key with its value being C<foo.com>. If you are really worried about someone crashing your app, you could set L</no_cache> to 1, or instead of using
+the C<*.> syntax you could list out each individual host. Note: This only applies if you are using the C<*.> syntax. If you do not use the C<*.> syntax, the hash
 that is used for caching is never even used. Also, in order to avoid letting the memory of your app grow uncontrollably, L<Plack::App::Hostmap> only caches hosts that
 actually map to a rule that you set. This way even if caching is on, someone can not make tons of requests with different hosts to your server and crash it.
 
