@@ -13,28 +13,28 @@ sub map {
     my $self = shift;
     my($domain, $app) = @_;
 
-	if(ref $domain eq 'ARRAY') { 
-		$self->_map_domain($_, $app) for @$domain;
-	}
-	else { $self->_map_domain($domain, $app) }
+    if(ref $domain eq 'ARRAY') { 
+        $self->_map_domain($_, $app) for @$domain;
+    }
+    else { $self->_map_domain($domain, $app) }
 }
 
 sub _map_domain { 
-	my ($self, $domain, $app) = @_;
+    my ($self, $domain, $app) = @_;
 
     Carp::croak("domain cannot be empty") unless $domain;
 
-	if($domain =~ /^\*\.(.*)$/) { 
-		$self->{_all_subdomains}->{$1} = 1;
-		$domain = $1;
-	} 
+    if($domain =~ /^\*\.(.*)$/) { 
+        $self->{_all_subdomains}->{$1} = 1;
+        $domain = $1;
+    } 
 
-	$self->{_map}->{$domain} = $app;
+    $self->{_map}->{$domain} = $app;
 }
 
 sub prepare_app { 
-	my ($self) = @_;
-	$self->{_dps} = Domain::PublicSuffix->new if keys %{$self->{_all_subdomains}};
+    my ($self) = @_;
+    $self->{_dps} = Domain::PublicSuffix->new if keys %{$self->{_all_subdomains}};
 }
 
 sub call {
@@ -43,20 +43,20 @@ sub call {
     my $http_host = $env->{HTTP_HOST};
  
     if ($http_host and my $port = $env->{SERVER_PORT}) {
-		$http_host =~ s/:$port$//;
+        $http_host =~ s/:$port$//;
     }
 
-	if($self->{_dps}) {
-		my $root = $self->{_dps}->get_root_domain($http_host);	
-		if($self->{_all_subdomains}->{$root} and $self->{_map}->{$root}) {
-			$http_host = $root;
-		}
-	}
+    if($self->{_dps}) {
+        my $root = $self->{_dps}->get_root_domain($http_host);  
+        if($self->{_all_subdomains}->{$root} and $self->{_map}->{$root}) {
+            $http_host = $root;
+        }
+    }
 
     return [404, [ 'Content-Type' => 'text/plain' ], [ "Not Found" ]] unless $self->{_map}->{$http_host};
 
-	my $app = $self->{_map}->{$http_host};
-	return $app->($env);
+    my $app = $self->{_map}->{$http_host};
+    return $app->($env);
 }
  
 1;
