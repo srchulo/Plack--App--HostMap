@@ -1,6 +1,10 @@
 Revision history for Plack::App::HostMap
 
 {{$NEXT}}
+    Can now handle multilevel subdomains, as suggested by singingfish. Also, added caching feature for
+    subdomains that match rules. Also, foo.com and *.foo.com can have different apps now.
+
+0.004     2014-05-17 14:19:25-07:00 America/Los_Angeles
 	Removed warn from module
 
 0.003     2014-05-17 13:46:15-07:00 America/Los_Angeles
