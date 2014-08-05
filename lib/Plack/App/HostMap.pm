@@ -160,19 +160,19 @@ If you need all subdomains of a host name to map to the same app, instead of lis
     $host_map->map("*.foo.com" => $foo_app); #will match www.foo.com, foo.com, beta.foo.com, test.foo.com, beta.test.foo.com, etc...
 
 This will map any subdomain of foo.com to C<$foo_app>. This way you can point new subdomains at your app without
-having to update your mappings. Also, L<Plack::App::Hostmap> will always match the most exact rule. For example, if you have the rules:
+having to update your mappings. Also, L<Plack::App::HostMap> will always match the most exact rule. For example, if you have the rules:
 
     $host_map->map("foo.com" => $foo_app);
     $host_map->map("*.foo.com" => $generic_foo_app);
 
 And you request C<foo.com>, it will match the C<$foo_app>, not the C<$generic_foo_app> since there is an explicit rule for C<foo.com>. 
-Also, if L<Plack::App::Hostmap> cannot find an exact match for a host, L<Plack::App::Hostmap> will always
+Also, if L<Plack::App::HostMap> cannot find an exact match for a host, L<Plack::App::HostMap> will always
 match the first rule it finds. For instance, if you have these two rules:
 
     $host_map->map("*.beta.foo.com" => $beta_foo_app);
     $host_map->map("*.foo.com" => $foo_app);
 
-And you request C<beta.foo.com>, it will match the C<$beta_foo_app>, not the C<$foo_app> because L<Plack::App::Hostmap> will find
+And you request C<beta.foo.com>, it will match the C<$beta_foo_app>, not the C<$foo_app> because L<Plack::App::HostMap> will find
 C<beta.foo.com> before C<foo.com> when looking for a match. 
  
 =method mount
@@ -204,7 +204,7 @@ mappings for a domain. For instance, if you have:
 Then after the first time that a url with the host C<beta.foo.com> is requested, the domain beta.foo.com will be stored in a hash as 
 a key with its value being C<*.foo.com>, to specify that that's what it maps to.
 If you are using the C<*.> syntax, it is strongly recommended that you do not turn this off because it could speed things up a lot since you avoid
-L<Domain::PublicSuffix>'s parsing logic, as well as some regex and logic that L<Plack::App::Hostmap> does to map the host to the right rule. However,
+L<Domain::PublicSuffix>'s parsing logic, as well as some regex and logic that L<Plack::App::HostMap> does to map the host to the right rule. However,
 one particular reason why you might want to disable caching would be if you were pointing A LOT of domains at your app. For instance, if you have the rule:
 
     $host_map->map("*.foo.com" => $foo_app);
@@ -225,7 +225,7 @@ And someone were to request many foo.com domains:
 
 Then each one would be cached as a key with its value being C<foo.com>. If you are really worried about someone crashing your app, you could set L</no_cache> to 1, or instead of using
 the C<*.> syntax you could list out each individual host. Note: This only applies if you are using the C<*.> syntax. If you do not use the C<*.> syntax, the hash
-that is used for caching is never even used. Also, in order to avoid letting the memory of your app grow uncontrollably, L<Plack::App::Hostmap> only caches hosts that
+that is used for caching is never even used. Also, in order to avoid letting the memory of your app grow uncontrollably, L<Plack::App::HostMap> only caches hosts that
 actually map to a rule that you set. This way even if caching is on, someone can not make tons of requests with different hosts to your server and crash it.
 
 =head1 PERFORMANCE
@@ -241,7 +241,7 @@ just one mapping with a C<*.> in it:
 Then on every request where the host is not an exact match for a rule (meaning that the host either matches a C<*.> syntax rule or no rule), 
 Plack::App::HostMap must call L<Domain::PublicSuffix>'s C<get_root_domain>
 subroutine to parse out the root domain of the host. I can't imagine that this is very costly, but
-maybe if you are receiving a lot of requests this could make a difference. Also, L<Plack::App::Hostmap>
+maybe if you are receiving a lot of requests this could make a difference. Also, L<Plack::App::HostMap>
 does some additional logic to map your hosts. If you find that it is the case that it is affecting your performance,
 instead of using the C<*.> syntax you could list out each individual possibility:
 

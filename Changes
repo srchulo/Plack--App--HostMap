@@ -1,6 +1,9 @@
 Revision history for Plack::App::HostMap
 
 {{$NEXT}}
+    Fixed Hostmap to HostMap
+
+0.005     2014-08-04 12:08:07-05:00 America/Chicago
     Can now handle multilevel subdomains, as suggested by singingfish. Also, added caching feature for
     subdomains that match rules. Also, foo.com and *.foo.com can have different apps now.
 
