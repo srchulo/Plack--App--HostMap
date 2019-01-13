@@ -1,8 +1,10 @@
 package Plack::App::HostMap;
-use strict;
-use warnings;
+
+use 5.008_005;
+our $VERSION = '0.007';
+
+use strictures 2;
 use parent qw/Plack::Component/;
-# ABSTRACT: Map multiple Plack apps by host 
 
 use Carp ();
 use Domain::PublicSuffix;
@@ -104,6 +106,10 @@ sub no_cache {
 1;
 
 __END__
+
+=head1 NAME
+
+Plack::App::HostMap - Map multiple Plack apps by host
  
 =head1 SYNOPSIS
  
@@ -144,8 +150,10 @@ is simpler and only dispatches based on host name, it can be much more efficient
 uses a hash to look up apps by host name, and thus instead of a linear time lookup is constant time. So if you had 2 apps
 to dispatch by host name or 10,000, there shouldn't be a difference in terms of performance since hashes provide constant
 time lookup.
+
+=head1 METHODS
  
-=method map
+=head2 map
  
     $host_map->map("www.foo.com" => $foo_app);
     $host_map->map("bar.com" => $bar_app);
@@ -175,11 +183,11 @@ match the first rule it finds. For instance, if you have these two rules:
 And you request C<beta.foo.com>, it will match the C<$beta_foo_app>, not the C<$foo_app> because L<Plack::App::HostMap> will find
 C<beta.foo.com> before C<foo.com> when looking for a match. 
  
-=method mount
+=head2 mount
  
 Alias for C<map>.
  
-=method to_app
+=head2 to_app
  
   my $handler = $host_map->to_app;
  
@@ -188,7 +196,7 @@ Plack::App::HostMap object is callable (by overloading the code
 dereference), so returning the object itself as a PSGI application
 should also work.
  
-=method no_cache
+=head2 no_cache
 
     $host_map->no_cache(1);
 
@@ -254,3 +262,16 @@ instead of using the C<*.> syntax you could list out each individual possibility
 
 And the result would be that lookup is back to constant time. However, you might never see a performance hit
 and it might be more worth it to use the convenient syntax.
+
+=head1 AUTHOR
+
+Adam Hopkins E<lt>srchulo@cpan.orgE<gt>
+
+=head1 COPYRIGHT
+
+Copyright 2019- Adam Hopkins
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.

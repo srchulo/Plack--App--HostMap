@@ -1,2 +1,10 @@
 .build
 Plack-App-HostMap-*
+/Plack-App-HostMap-*
+/.build
+/_build_params
+/Build
+/Build.bat
+!Build/
+!META.json
+!LICENSE
