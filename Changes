@@ -1,6 +1,8 @@
 Revision history for Plack::App::HostMap
 
 {{$NEXT}}
+
+0.007  2019-01-13 15:14:01 CST
     - Updated to using Dist::Milla for releases
     - use strictures
 
